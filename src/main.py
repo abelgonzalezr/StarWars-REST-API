@@ -42,6 +42,18 @@ def get_users():
     return jsonify(response_body), 200
 
 
+@app.route('/character', methods=['GET'])
+def get_ch():
+    users = User.query.filter().all()
+    result = list(map(lambda user: user.serialize(), users))
+
+    response_body = {
+        "user": result
+    }
+
+    return jsonify(response_body), 200
+
+
 @app.route('/character/<int:id>', methods=['GET'])
 def get_characters(id):
     character = Character.query.get(id)
@@ -62,16 +74,34 @@ def get_planet(planet_id):
 
     return jsonify(result), 200
 
-@app.route('/planet_favorite/<int:planet_id>', methods=['POST'])
-def favorite_planet(planet_id, user_id):
-    addPlanet= Planet.query.get(planet_id)
-    addUser= User.query.get(user_id)
-    planeta_favorito[addUser] = addPlanet
-    print(planeta_favorito)
 
+@app.route('/planet', methods=['GET'])
+def get_plane(planet_id):
+    planet = Planet.query.get(planet_id)
+    print(planet.serialize())
     result = {
-        addUser: addPlanet
+        "planeta": planet_id
     }
+
+    return jsonify(result), 200
+
+@app.route('/planet_favorite/<int:user_id>', methods=['GET'])
+def favorite_planet( user_id):
+    favorite_planet= Planet_favorite.query.filter_by(user_id=user_id)
+    result = list(map(lambda favorite: favorite.serialize(), favorite_planet))
+    print(result[0])
+    # resulti = {
+    #     "favorite_planet": result[0].
+    # }
+    #  jsonify(resulti)
+    return result[0], 200
+
+
+@app.route('/planet_favorite', methods=['GET'])
+def favorite_planets():
+
+
+    return "planet_favorite", 200
 
 
 # this only runs if `$ python src/main.py` is executed
